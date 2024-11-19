@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/schedule/*"})
+//@WebFilter(urlPatterns = {"/schedule/*"})
 public class LoginFilter implements Filter {
 
     @Override

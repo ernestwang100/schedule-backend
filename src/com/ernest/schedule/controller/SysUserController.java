@@ -21,20 +21,15 @@ import java.io.IOException;
 public class SysUserController extends BaseController {
     private final SysUserService userService = new SysUserServiceImpl();
 
-    public void regist(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void register(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         System.out.println("run regist");
         // Log headers and body for debugging
-        String username = req.getParameter("username");
-        String password =  req.getParameter("password");
-        System.out.println("username = " + username + " password = " + password);
 
 //        logRequestDetails(req);
 
         // Get the request body object
-//        SysUser registUser = WebUtil.readJson(req, SysUser.class);
-        SysUser registUser = new SysUser(null, username, password);
+        SysUser registUser = WebUtil.readJson(req, SysUser.class);
         int rows = userService.regist(registUser);
-        System.out.println("rows = " + rows);
         Result result = null;
         // Based on the registration result (success or failure), redirect the page
         if (rows > 0) {
@@ -48,22 +43,23 @@ public class SysUserController extends BaseController {
     }
 
     public void login(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+//        logRequestDetails(req);
         SysUser loginUser = WebUtil.readJson(req, SysUser.class);
-        String username = loginUser.getUsername();
-        String password = loginUser.getPassword();
-        System.out.println("username = " + username + " password = " + password);
+//        String username = loginUser.getUsername();
+//        String password = loginUser.getUser_pwd();
+//        System.out.println("username = " + username + " password = " + password);
 
-        SysUser user = userService.findByUsername(username);
+        SysUser user = userService.findByUsername(loginUser.getUsername());
         Result result = null;
         if (null == user) {
             result = Result.build(null, ResultCodeEnum.USERNAME_ERROR);
-        } else if (!MD5Util.encrypt(password).equals(user.getPassword())) {
+        } else if (!MD5Util.encrypt(loginUser.getUser_pwd()).equals(user.getUser_pwd())) {
             // Check if the password matches
             result = Result.build(null, ResultCodeEnum.PASSWORD_ERROR);
         } else {
             req.getSession().setAttribute("sysUser", user);
             // Hide the password before returning it to the client
-            user.setPassword("******");
+            user.setUser_pwd("******");
             result = Result.ok(user);
         }
         WebUtil.writeJson(resp, result);

@@ -23,5 +23,13 @@ public interface SysScheduleDao {
      */
 
     List<SysSchedule> findAll();
+
+    List<SysSchedule> findItemListByUid(int uid);
+
+    Integer addDefault(int uid);
+
+    Integer updateSchedule(SysSchedule sysSchedule);
+
+    Integer deleteSchedule(int sid);
 }
 

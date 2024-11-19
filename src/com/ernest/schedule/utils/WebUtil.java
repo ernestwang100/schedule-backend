@@ -26,6 +26,7 @@ public class WebUtil {
         try {
             reader = request.getReader();
             StringBuffer buffer = new StringBuffer();
+            System.out.println("Request Body: " + buffer.toString());
             String line = null;
             while ((line = reader.readLine()) != null) {
                 buffer.append(line);
